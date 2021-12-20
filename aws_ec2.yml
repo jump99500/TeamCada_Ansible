@@ -1,0 +1,17 @@
+plugin: aws_ec2
+
+boto_profile: default
+
+regions:
+  - ap-northeast-2
+filters:
+  instance-state-name: running
+
+compose:
+  ansible_host: private_ip_address
+
+hostnames:
+  - private-ip-address
+
+keyed_groups:
+  - key: tags
