@@ -2,29 +2,36 @@
 - name: elb
   hosts: localhost
   vars_files:
-          - variable.yml
+          - variable.yaml
   tasks:
           - elb_application_lb_info:
-                    region: "{{ project_region }}"
-                    names: "{{ project_name }}-nlb"
-            register: elb
+                    region: ap-northeast-2
+                    names: nlb
+            register: nlb
 - name: web
-  hosts: _web
+  hosts: _Name_web
   become: true
   vars_files:
-          - variable.yml
+          - variable.yaml
+  vars:
+          ansible_ssh_private_key_file: ./id_rsa
   tasks:
           - name: httpd
-            yum:
-                    name: httpd
-                    state: latest
+            shell: sudo yum install httpd -y
+            args:
+                    executable: /bin/bash
+          - name: health check
+            shell: sudo echo 'health check'> /var/www/html/health.html
+            args:
+                    executable: /bin/bash
+
           - name: start
             service:
                     name: httpd
                     state: started
                     enabled: true
             ignore_errors: true
-          - name: proxy1
+          - name: proxy
             blockinfile:
                     dest: /etc/httpd/conf/httpd.conf
                     content: |
@@ -34,11 +41,11 @@
                                     Order deny,allow
                                     Allow from all
                             </Proxy>
-                            ProxyPass / http://{{ item }}:8080/
+                            ProxyPass /petclinic http://{{ item }}:8080/petclinic
                             ProxyPassReverse / http://{{ item }}:8080/
                     insertbefore: "^</VirtualHost>$"
-            with_items: '{{ hostvars["localhost"]["elb"].load_balancers[0].dns_name }}'
-          - name: proxy2
+            with_items: '{{ hostvars["localhost"]["nlb"].load_balancers[0].dns_name }}'
+          - name: proxy3
             systemd:
                     name: httpd
                     state: restarted

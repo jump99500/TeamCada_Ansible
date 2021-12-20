@@ -1,21 +1,21 @@
 ---
 - name: efs
-  hosts: _web
+  hosts: _Name_web
   vars_files:
           - variable.yaml
   tasks:
           - efs_info:
-                    region: '{{ project_region }}'
-                    name: '{{ project_name }}-efs1230'
+                    region: "{{ project_region }}"
+                    name: "{{ project_name }}-efs1230"
             register: efs
 - name: was
-  hosts: _web
+  hosts: _Name_web
   become: true
   vars_files:
           - variable.yaml
   vars:
-          ansible_ssh_private_key_file: '{{ key_name }}'
-  tasks:      
+          ansible_ssh_private_key_file: "{{ key_name }}"
+  tasks:
           - name: install nfs-common
             apt:
                     name: nfs-common
