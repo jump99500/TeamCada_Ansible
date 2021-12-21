@@ -4,7 +4,9 @@ regions:
   - ap-northeast-2
 filters:
   instance-state-name: running
-compose:
-  ansible_host: private_ip_address
 keyed_groups:
   - key: tags.Name
+compose:
+  ansible_host: private_ip_address
+hostnames:
+  - private-ip-address
