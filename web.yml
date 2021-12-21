@@ -2,17 +2,17 @@
 - name: elb
   hosts: localhost
   vars_files:
-          - variable.yaml
+          - variable.yml
   tasks:
           - elb_application_lb_info:
                     region: ap-northeast-2
                     names: nlb
             register: nlb
 - name: web
-  hosts: _Name_web
+  hosts: _cd_web
   become: true
   vars_files:
-          - variable.yaml
+          - variable.yml
   vars:
           ansible_ssh_private_key_file: ./id_rsa
   tasks:

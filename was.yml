@@ -2,17 +2,17 @@
 - name: rds
   hosts: localhost
   vars_files:
-          - variable.yaml
+          - variable.yml
   tasks:
           - rds_instance_info:
                     region: "{{ project_region }}"
                     db_instance_identifier: "{{ project_name }}"
             register: rds
 - name: was
-  hosts: _Name_was
+  hosts: _cd_was
   become: true
   vars_files:
-          - variable.yaml
+          - variable.yml
   vars:
           ansible_ssh_private_key_file: ./id_rsa
   tasks:
