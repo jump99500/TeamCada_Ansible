@@ -6,7 +6,7 @@
   tasks:
           - rds_instance_info:
                     region: "{{ project_region }}"
-                    db_instance_identifier: "{{ project_name }}-db"
+                    db_instance_identifier: "{{ project_name }}"
             register: rds
 - name: was
   hosts: _cd_was
