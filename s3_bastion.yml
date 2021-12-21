@@ -2,7 +2,7 @@
 - name: s3_bucket_connect
   hosts: _bastion
   vars_files:
-          - variable.yaml
+          - variable.yml
   become: true
   tasks:      
           - name: install apt
