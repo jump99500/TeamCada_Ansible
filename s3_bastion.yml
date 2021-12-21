@@ -46,5 +46,5 @@
                     state: directory      
           - name: mount
             shell:
-                    cmd: s3fs {{ project_name }}-log-bucket123 -o iam_role="{{ project_name }}-role-ansible" -o endpoint={{ project_region }} -o allow_other -o use_cache=/tmp -o uid=1000 -o mp_umask=002 /home/ec2-user/s3bucket
+                    cmd: s3fs {{ project_name }}-log-bucket1230 -o iam_role="{{ project_name }}-role-ansible" -o endpoint={{ project_region }} -o allow_other -o use_cache=/tmp -o uid=1000 -o mp_umask=002 /home/ec2-user/s3bucket
                     chdir: /home/ec2-user/s3fs-fuse
