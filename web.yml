@@ -7,7 +7,7 @@
           - elb_application_lb_info:
                     region: ap-northeast-2
                     names: cd-nlb
-            register: cd-nlb
+            register: nlb
 - name: web
   hosts: _cd_web
   become: true
@@ -44,7 +44,7 @@
                             ProxyPass /petclinic http://{{ item }}:8080/petclinic
                             ProxyPassReverse / http://{{ item }}:8080/
                     insertbefore: "^</VirtualHost>$"
-            with_items: '{{ hostvars["localhost"]["cd-nlb"].load_balancers[0].dns_name }}'
+            with_items: '{{ hostvars["localhost"]["nlb"].load_balancers[0].dns_name }}'
           - name: proxy3
             systemd:
                     name: httpd
