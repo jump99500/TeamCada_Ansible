@@ -6,7 +6,7 @@
   tasks:
           - efs_info:
                     region: "{{ project_region }}"
-                    name: "{{ project_name }}-efs1230"
+                    name: "{{ project_name }}-efs"
             register: efs
 - name: was_efs
   hosts: localhost
