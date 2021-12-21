@@ -1,50 +1,49 @@
 ---
 - name: s3_bucket_connect
-  hosts: _Name_bastion
+  hosts: localhost
   vars_files:
-          - variable.yaml
+          - variable.yml
   become: true
-  tasks:
-          - name: install apt
-            apt:
-                    name:
-                            - automake
-                            - autotools-dev
-                            - fuse
-                            - g++
-                            - libcurl4-gnutls-dev
-                            - libfuse-dev
-                            - libssl-dev
-                            - libxml2-dev
-                            - make
-                            - pkg-config
+  tasks:      
+          - name: install package
+            yum:
+                    name: 
+                        - automake 
+                        - fuse 
+                        - fuse-devel 
+                        - gcc-c++ 
+                        - git 
+                        - libcurl-devel 
+                        - libxml2-devel 
+                        - make 
+                        - openssl-devel
                     state: latest
-          - name: git
+          - name: Clone s3fs source code from git
             git:
                     repo: https://github.com/s3fs-fuse/s3fs-fuse.git
-                    dest: /home/ec2-user/s3fs-fuse
+                    dest: /root/s3fs-fuse
                     clone: true
                     force: true
-          - name: keygen
+          - name: autogen
             shell:
                     cmd: ./autogen.sh
-                    chdir: /home/ec2-user/s3fs-fuse
-          - name: openssl
+                    chdir: /root/s3fs-fuse
+          - name: configure
             shell:
-                    cmd: ./configure --prefix=/usr --with-openssl
-                    chdir: /home/ec2-user/s3fs-fuse
+                    cmd: ./configure
+                    chdir: /root/s3fs-fuse
           - name: Build
             make:
-                    chdir: /home/ec2-user/s3fs-fuse
-          - name: Run install
+                    chdir: /root/s3fs-fuse
+          - name: install
             make:
-                    chdir: /home/ec2-user/s3fs-fuse
+                    chdir: /root/s3fs-fuse
                     target: install
           - name: mkdir s3bucket
-            file:
-                    path: /home/ec2-user/s3bucket
-                    state: directory
+            shell: mkdir -p /s3bucket
+            args:
+                    executable: /bin/bash
           - name: mount
-            shell:
-                    cmd: s3fs {{ project_name }}-log-bucket123 -o iam_role="{{ project_name }}-role-ansible" -o endpoint={{ project_region }} -o allow_other -o use_cache=/tmp -o uid=1000 -o mp_umask=002 /home/ec2-user/s3bucket
-                    chdir: /home/ec2-user/s3fs-fuse
+            shell: /usr/local/bin/s3fs {{ project_name }}-log-bucket1230 /s3bucket
+            args:
+                    executable: /bin/bash
