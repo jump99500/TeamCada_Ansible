@@ -9,7 +9,7 @@
                   db_instance_identifier: '{{ project_name }}'
             register: rds
 - name: was
-  hosts: _cd_was
+  hosts: _wafo_was
   become: true
   vars_files:
     - variable.yaml
@@ -111,7 +111,7 @@
     args:
             executable: /bin/bash
   - name: git petclinic
-    shell: git clone https://github.com/gouthamchilakala/PetClinic /home/ec2-user/petclinic_btc
+    shell: git clone https://github.com/SteveKimbespin/petclinic_btc.git /home/ec2-user/petclinic_btc
     args:
             executable: /bin/bash
   - name: chown petclinic

@@ -24,3 +24,4 @@
             shell: sudo cp -r /usr/share/tomcat/logs/ /home/ec2-user/s3bucket/was_log
             args:
                     executable: /bin/bash
+
