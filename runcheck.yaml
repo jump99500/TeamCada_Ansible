@@ -1,0 +1,62 @@
+---
+- name: runcheck httpd
+  hosts: _web
+  become: true
+  vars_files:
+          - variable.yaml
+  vars:
+          ansible_ssh_private_key_file: ./id_rsa
+  tasks:
+          - name: make file
+            copy:
+                    dest: /home/ec2-user/runcheck.sh
+                    content: |
+                            result=`ps -efaux | grep "httpd" | grep -v "grep" | wc -l`
+                            if [ $result -ge 1 ]
+                            then
+                            echo "httpd service is running"
+                            else
+                            echo "httpd service is not running"
+
+                            systemctl start httpd
+                            echo `date` restarted httpd >> /home/ec2-user/httpd_runcheck.log
+
+                            aws s3 cp /home/ec2-user/httpd_runcheck.log s3://{{ project_name }}-log-bucket1230/ec2_log/
+                            echo "nifi started"
+                            fi
+                    mode: 0755
+          - name: runcheck play
+            shell: /home/ec2-user/runcheck.sh
+            args:
+                    executable: /bin/bash
+- name: runcheck tomcat
+  hosts: _was
+  become: true
+  vars_files:
+          - variable.yaml
+  vars:
+          ansible_ssh_private_key_file: ./id_rsa
+  tasks:
+          - name: make file
+            copy:
+                    dest: /home/ec2-user/runcheck.sh
+                    content: |
+                            result=`ps -efaux | grep -e "org.apache.catalina.startup.Bootstrap start" | grep -v "grep" | wc -l`
+                            if [ $result -ge 1 ]
+                            then
+                            echo "tomcat service is running"
+                            else
+                            echo "tomcat service is not running"
+
+                            systemctl start tomcat
+                            echo `date` restarted tomcat >> /home/ec2-user/tomcat_runcheck.log
+
+                            aws s3 cp /home/ec2-user/tomcat_runcheck.log s3://{{ project_name }}-log-bucket1230/ec2_log/
+                            echo "nifi started"
+                            fi
+                    mode: 0755
+          - name: runcheck play
+            shell: /home/ec2-user/runcheck.sh
+            args:
+                    executable: /bin/bash
+

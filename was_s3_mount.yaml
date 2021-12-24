@@ -47,3 +47,7 @@
             shell: /usr/local/bin/s3fs {{ project_name }}-log-bucket1230 /home/ec2-user/s3bucket
             args:
                     executable: /bin/bash
+          - name: mkdir was_log
+            shell: sudo mkdir /home/ec2-user/s3bucket/was_log
+            args:
+                    executable: /bin/bash
