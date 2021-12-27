@@ -57,7 +57,7 @@
                     insertbefore: </Context>
           - name: test.jsp
             copy:
-                    dest: /usr/share/tomcat/webapps/examples/test.jsp
+                    dest: /usr/share/tomcat/webapps/test.jsp
                     content: |
                            <%@ page language="java" contentType="text/html; charset=EUC-KR"
                                    pageEncoding="EUC-KR"%>
