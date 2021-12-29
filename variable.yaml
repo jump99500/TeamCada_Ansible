@@ -1,3 +1,4 @@
-project_name: 'cd'
+project_name: 'wafo'
 project_region: 'ap-northeast-2'
 key_name: './id_rsa'
+bucket_name: 'wafo-log-bucket0815'

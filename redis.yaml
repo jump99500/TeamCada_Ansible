@@ -9,13 +9,13 @@
                   name: '{{ project_name }}-redis'
             register: redis
 - name: redis connect
-  hosts: _was
+  hosts: _wafo_was
   become: true
   gather_facts: false
   vars_files:
           - variable.yaml
   vars:
-          ansible_ssh_private_key_file: '{{ key_name }}'
+          ansible_ssh_private_key_file: ./id_rsa
   tasks:
           - name: wget
             get_url:
@@ -41,12 +41,12 @@
           - name: change conf properties
             lineinfile:
                     dest: /usr/share/tomcat/conf/redis-data-cache.properties
-                    regexp: redis.hostsa
+                    regexp: redis.hosts=127.0.0.1:6379
                     line: redis.hosts={{ hostvars.localhost.redis.elasticache_clusters[0].cache_nodes[0].endpoint.address }}:6379
           - name: change conf web.xml
             replace:
                     dest: /usr/share/tomcat/conf/web.xml
-                    regexp: <session-timeout>*</session-timeout>
+                    regexp: <session-timeout>30</session-timeout>
                     replace: <session-timeout>60</session-timeout>
           - name: change conf context.xml
             blockinfile:
@@ -57,7 +57,7 @@
                     insertbefore: </Context>
           - name: test.jsp
             copy:
-                    dest: /usr/share/tomcat/webapps/test.jsp
+                    dest: /usr/share/tomcat/webapps/ROOT/test.jsp
                     content: |
                            <%@ page language="java" contentType="text/html; charset=EUC-KR"
                                    pageEncoding="EUC-KR"%>

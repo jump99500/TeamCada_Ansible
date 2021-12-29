@@ -7,6 +7,10 @@
   vars:
           ansible_ssh_private_key_file: ./id_rsa
   tasks:
+          - name: web access log s3
+            shell: sudo cp -r /var/log/httpd/access_log /home/ec2-user/s3bucket/web_log/accesslog$(date '+-%y-%m-%d.log')
+            args:
+                    executable: /bin/bash
           - name: web error log s3
             shell: sudo cp -r /var/log/httpd/error_log /home/ec2-user/s3bucket/web_log/errorlog$(date '+-%y-%m-%d.log')
             args:
@@ -20,6 +24,11 @@
   vars:
           ansible_ssh_private_key_file: ./id_rsa
   tasks:
+          - name: was access log s3
+            shell: sudo cp -r /usr/share/tomcat/logs/localhost_access_log.*.log /home/ec2-user/s3bucket/was_log/
+
+            args:
+                    executable: /bin/bash
           - name: was error log s3
             shell: sudo cp -r /usr/share/tomcat/logs/catalina.out /home/ec2-user/s3bucket/was_log/errorlog$(date '+-%y-%m-%d.out')
             args:
