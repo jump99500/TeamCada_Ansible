@@ -1,5 +1,5 @@
 ---
-- name: wafo_web
+- name: cd_web
   hosts: _web
   vars_files:
         - variable.yaml
